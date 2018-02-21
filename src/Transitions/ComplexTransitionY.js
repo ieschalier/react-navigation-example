@@ -89,7 +89,16 @@ const Second = ({ position, index, navigation }) => {
       <TouchableOpacity onPress={() => navigation.goBack(null)}>
         <View style={{ height: 200 }} />
       </TouchableOpacity>
-      <View style={{ flex: 1, backgroundColor: '#897' }}>
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: '#897',
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: 3 },
+          shadowOpacity: 0.8,
+          shadowRadius: 3,
+        }}
+      >
         <TouchableOpacity
           onPress={() => navigation.goBack(null)}
         >
