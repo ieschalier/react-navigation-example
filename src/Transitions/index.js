@@ -3,7 +3,7 @@ import Flip from './Flip'
 import Replace from './Replace'
 import Scale from './Scale'
 import TransitionY from './TransitionY'
-import ComplexTransitionY from './ComplexTransitionY'
+import Panel from './Panel'
 
 export default {
   Fade,
@@ -11,5 +11,5 @@ export default {
   Replace,
   Scale,
   TransitionY,
-  ComplexTransitionY,
+  Panel,
 }

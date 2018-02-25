@@ -5,9 +5,10 @@ import {
   Animated,
   TouchableOpacity,
   Dimensions,
+  PanResponder
 } from 'react-native'
 
-export default ({ position, index, navigation }) => {
+const Second = ({ position, index, navigation }) => {
   const animatedValue = position.interpolate({
     inputRange: [index - 1, index, index + 1],
     outputRange: [0.3, 1, 1],
@@ -17,9 +18,11 @@ export default ({ position, index, navigation }) => {
     inputRange: [index - 1, index, index + 1],
     outputRange: [Dimensions.get('window').height, 0, 0],
   })
-
+  
   return (
-    <View style={{ flex: 1 }}>
+    <View
+      style={{ flex: 1 }}
+    >
       <TouchableOpacity onPress={() => navigation.goBack(null)}>
         <View style={{ height: 200 }} />
       </TouchableOpacity>
@@ -42,7 +45,7 @@ export default ({ position, index, navigation }) => {
               width: 100,
               justifyContent: 'center',
               alignItems: 'center',
-              transform:[
+              transform: [
                 {
                   scale: animatedValue,
                 }
@@ -66,9 +69,11 @@ export default ({ position, index, navigation }) => {
             }}
           >
             Hello
-          </Animated.Text>
+            </Animated.Text>
         </View>
       </View>
     </View>
   )
 }
+
+export default Second

@@ -16,12 +16,12 @@ import {
   createNavigationContainer,
   createNavigator,
 } from 'react-navigation'
-import CardStack from 'react-navigation/src/views/CardStack/CardStack'
 import SafeArea from 'react-native-safe-area-view'
 import First from '../First'
 import Second from './Second'
+import ModalGesture from './ModalGesture'
 
-const styles = StyleSheet.create({
+const styles = {
   view: {
     position: 'absolute',
     left: 0,
@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
     top: 0,
     bottom: 0,
   },
-})
+}
 
 class NavigationView extends React.Component {
   renderScene = (props, scene) => {
@@ -37,17 +37,22 @@ class NavigationView extends React.Component {
     const { routes } = navigation.state
     const { position } = props
     const { index } = scene
-  
+
     const animatedValue = position.interpolate({
       inputRange: [index - 1, index - 0.7, index],
       outputRange: [0, 1, 1],
     })
-  
+
     const animatedTranslate = position.interpolate({
       inputRange: [index - 1, index, index + 1],
       outputRange: [(Dimensions.get('window').height / 2), 0, 0],
     })
-  
+
+    const animatedBg = position.interpolate({
+      inputRange: [index - 1, index, index + 1],
+      outputRange: ['#0000', '#000a', '#0000'],
+    })
+
     const animation = {
       opacity: animatedValue,
       transform: [
@@ -56,19 +61,45 @@ class NavigationView extends React.Component {
         }
       ]
     }
-  
+
     const Scene = router.getComponentForRouteName(scene.route.routeName)
+
+    const isModal = index === 1
   
     return (
-      <Animated.View key={index} style={[styles.view, animation]}>
-        <Scene
-          navigation={addNavigationHelpers({
-            ...navigation,
-            state: routes[index],
-          })}
-          position={position}
-          index={index}
-        />
+      <Animated.View
+        key={index} 
+        style={{
+          ...styles.view,
+          backgroundColor: isModal ? animatedBg : '#0000',
+        }}
+      >
+        <Animated.View style={{ ...styles.view, ...animation}}>
+          {isModal
+            ? <ModalGesture
+              navigation={navigation}
+              position={position}
+              index={index}
+            >
+              <Scene
+                navigation={addNavigationHelpers({
+                  ...navigation,
+                  state: routes[index],
+                })}
+                position={position}
+                index={index}
+              />
+            </ModalGesture>
+            : <Scene
+              navigation={addNavigationHelpers({
+                ...navigation,
+                state: routes[index],
+              })}
+              position={position}
+              index={index}
+            />
+          }
+        </Animated.View>
       </Animated.View>
     )
   }
@@ -90,7 +121,7 @@ class NavigationView extends React.Component {
 
     return (
       <Transitioner
-        configureTransition={() => ({ duration: 600, easing: Easing.out(Easing.ease) })}
+        configureTransition={() => ({ duration: 300, easing: Easing.out(Easing.ease) })}
         navigation={navigation}
         render={this.renderScenes}
       />
